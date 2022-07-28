@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Поиск</title>
+    <style>
+        img.big {
+            width: 500px;
+        }
+
+        img.small {
+            width: 300px;
+        }
+    </style>
+</head>
+<body>
+    <a th:href="@{/v1/user/{user-id}(user-id=${userId})}" th:if="${userId != null}">Мой профиль</a>
+    <a th:href="@{/v1/auth/login}">Вход в аккаунт</a>
+    <a th:href="@{/v1/product/create}">Создать объявление</a>
+  <form action="/v1/product/search" method="post" th:object="${filterWrapper}">
+
+      <div>
+          <label for="product-name">Наименование</label>
+          <input type="text" th:field="*{filterName.value}" th:value="${filterWrapper.getFilterName().getValue()}" id="product-name" maxlength="128">
+      </div>
+      </br>
+      <div>
+          <label for="product-category">Категория</label>
+          <select th:field="*{filterCategory.value}" id="product-category">
+
+<!--              <option disabled selected="selected" th:if="${filterWrapper.getFilterCategory().getValue() != null}"-->
+<!--                      th:value="${filterWrapper.getFilterCategory().getValue()}" th:text="${filterWrapper.getFilterCategory().getValue()}"></option>-->
+              <option th:value="${null}">Выберите категорию</option>
+              /*@thymesVar id="categoryDto" type="our.replacement.store.dto.CategoryDto"*/
+              <option th:each="categoryDto : ${categoryDtoList}"
+                      th:value="${categoryDto.getCategoryId()}"
+                      th:text="${categoryDto.getName()}"/>
+
+          </select>
+      </div>
+      <div>
+          <input type="hidden" th:field="*{filterName.operation}" th:value="${filterWrapper.filterName.getOperation()}">
+          <input type="hidden" th:field="*{filterName.name}" th:value="${filterWrapper.filterName.getName()}">
+          <input type="hidden" th:field="*{filterName.sqlType}" th:value="${filterWrapper.filterName.getSqlType()}">
+
+          <input type="hidden" th:field="*{filterCategory.operation}" th:value="${filterWrapper.filterCategory.getOperation()}">
+          <input type="hidden" th:field="*{filterCategory.name}" th:value="${filterWrapper.filterCategory.getName()}">
+          <input type="hidden" th:field="*{filterCategory.sqlType}" th:value="${filterWrapper.filterCategory.getSqlType()}">
+      </div>
+      </br>
+      <input type="submit" value="Отправить">
+      </br>
+  </form>
+  </br>
+  <div th:each="shortProductDto : ${shortProductDtoList}">
+      <div class="shortProduct">
+          <!--/*@thymesVar id="shortProductDto" type="our.replacement.store.dto.ShortProductDto"*/-->
+          <img class="small" th:src="${shortProductDto.getImageUrl()}"/>
+          <br>
+          <a th:href="@{/v1/product/{id}(id=${shortProductDto.getProductId()})}" th:text="${shortProductDto.getName()}"/>
+          <p th:text="${shortProductDto.getPrice()}"/>
+      </div>
+      </br>
+  </div>
+  </br>
+</body>
+</html>

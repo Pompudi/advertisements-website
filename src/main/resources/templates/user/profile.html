@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+      img.big {
+        width: 500px;
+      }
+
+      img.small {
+        width: 300px;
+      }
+    </style>
+</head>
+<body>
+  <h1>Мои данные</h1>
+  <p th:text="${user.getFullName()}"></p>
+  <p th:text="${user.getPhoneNumber()}"></p>
+  <a href="/v1/product/search">Перейти на страницу поиска обявлений</a>
+  <a th:href="@{/v1/user/{user-id}/update-info(user-id=${user.getUserId()})}">Редактировать профиль</a>
+  <a href="/logout">Выйти</a>
+  <a th:href="@{/v1/user/{user-id}/deal-history(user-id=${user.getUserId()})}">Мои сделки</a>
+  <h1>Мои объявления</h1>
+  <h2>Активные</h2>
+  <div th:each="product : ${activeProduct}">
+    <div>
+      <img class="small" th:src="${product.getImageUrl}">
+    </div>
+    <div th:text="${product.getName}"></div>
+    <div th:text="${product.getPrice}"></div>
+    <a th:href="@{/v1/product/{productId}/edit(productId=${product.getProductId})}">Редактировать</a>
+    </br>
+    </br>
+  </div>
+  </br>
+  <h2>Неактивные</h2>
+  <div th:each="product : ${inactiveProduct}">
+    <div>
+      <img class="small" th:src="${product.getImageUrl}">
+    </div>
+    <div th:text="${product.getName}"></div>
+    <div th:text="${product.getPrice}"></div>
+    </br>
+    </br>
+  </div>
+</body>
+</html>

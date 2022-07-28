@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Объявление</title>
+    <style>
+        .split {
+            height: 100%;
+            width: 50%;
+            position: absolute;
+        }
+
+        .left {
+            left: 10%;
+        }
+
+        .right {
+            right: 0;
+        }
+
+        img.big {
+            width: 500px;
+        }
+
+        img.small {
+            width: 300px;
+        }
+    </style>
+</head>
+<body>
+
+<a th:href="@{/v1/product/search}">Назад в поиск</a>
+
+<h1 th:text="${productDto.getName()}">Название</h1>
+
+<div class="split left">
+    <div>
+        <p th:text="${productDto.getCategoryName()}">Категория</p>
+        <p></p>
+    </div>
+    </br>
+    <div>
+        <img class="big" th:src="${productDto.getImageUrl()}"/>
+    </div>
+    </br>
+    <div>
+        <p th:text="${productDto.getAddress()}">Адрес</p>
+    </div>
+    </br>
+    <div>
+        <p th:text="${productDto.getDescription()}">Описание</p>
+    </div>
+    </br>
+</div>
+
+<div class="split right">
+    <div>
+        <h2 th:text="${productDto.getPrice()}">Цена</h2>
+    </div>
+    <div th:if="${productDto.getDealTimestamp() != null}">
+        <p>Объявление не актуально</p>
+    </div>
+    <div th:if="${productDto.getDealTimestamp() == null}">
+        <div th:if="${userId == null}">
+            <form th:action="@{/v1/auth/login}">
+                <input type="submit" value="Купить">
+            </form>
+        </div>
+        <div th:if="${userId != null}">
+            <form th:action="@{/v1/product/deal}" method="post" th:object="${productDto}">
+                <input type="hidden" id="customerId" name="customerId" th:value="${userId}">
+                <input type="hidden" id="productId" name="productId" th:value="${productDto.getProductId()}">
+                <input type="hidden" id="sellerId" name="sellerId" th:value="${productDto.getSellerId()}">
+                <input type="submit" value="Купить">
+            </form>
+        </div>
+    </div>
+    </br>
+    </br>
+    <div>
+        <p>Дата размещения: </p>
+        <p th:text="${productDto.getCreateTimestamp()}"></p>
+    </div>
+    </br>
+</div>
+
+</body>
+</html>

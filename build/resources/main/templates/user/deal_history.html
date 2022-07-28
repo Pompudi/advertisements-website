@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        img.big {
+            width: 500px;
+        }
+
+        img.small {
+            width: 300px;
+        }
+    </style>
+</head>
+<body>
+<h1>Мои продажи</h1>
+<div th:each="product : ${purchased}">
+    <div>
+        <img class="small" th:src="${product.getImageUrl}">
+    </div>
+  <div th:text="${product.name}"></div>
+  <div th:text="${product.price}"></div>
+  <div th:text="${product.dealTimestamp}"></div>
+  <div th:text="${product.getCustomerName}"></div>
+</div>
+<h1>Мои покупки</h1>
+<div th:each="product : ${sales}">
+    <div>
+        <img class="small" th:src="${product.getImageUrl}">
+    </div>
+    <div th:text="${product.name}"></div>
+    <div th:text="${product.price}"></div>
+    <div th:text="${product.dealTimestamp}"></div>
+</div>
+</body>
+</html>

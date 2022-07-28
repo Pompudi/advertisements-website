@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Изменить объявление</title>
+    <style>
+        img.big {
+            width: 500px;
+        }
+
+        img.small {
+            width: 300px;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <label for="existing-image">Существущее изображение</label>
+        </br>
+        <img class="big" th:src="${productDto.getImageUrl()}" id="existing-image"/>
+    </div>
+
+    <form th:action="@{/v1/product/{id}/edit(id=${productDto.getProductId()})}" th:method="PUT"
+          enctype="multipart/form-data">
+
+        <div>
+            <label for="product-image">Заменить изображение</label>
+            </br>
+            <input type="file" name="imageFile" id="product-image">
+        </div>
+        </br>
+        <div>
+            <label for="product-name">Наименование</label>
+            <!--/*@thymesVar id="productDto" type="our.replacement.store.dto.ProductDto"*/-->
+            <input type="text" name="name" th:field="*{productDto.name}" id="product-name" maxlength="128" required>
+            <p style="color: red" th:if="${#fields.hasErrors('productDto.name')}" th:errors="*{productDto.name}">Ошибка заполнения наименования</p>
+        </div>
+        </br>
+        <div>
+            <label for="product-category">Категория</label>
+            <select th:field="*{productDto.categoryId}" id="product-category" required>
+                <option disabled selected th:value="${productDto.getCategoryId()}" th:text="${productDto.getCategoryName()}"/>
+                <option th:value="${null}">Выбрать категорию</option>
+                <!--/*@thymesVar id="categoryDto" type="our.replacement.store.dto.CategoryDto"*/-->
+                <option th:each="categoryDto : ${categoryDtoList}"
+                        th:value="${categoryDto.getCategoryId()}"
+                        th:text="${categoryDto.getName()}"/>
+            </select>
+        </div>
+        </br>
+        <div>
+            <label for="product-price">Цена</label>
+            <input type="number" name="price" th:field="*{productDto.price}" id="product-price" required>
+            <p style="color: red" th:if="${#fields.hasErrors('productDto.price')}" th:errors="*{productDto.price}">Ошибка заполнения цены</p>
+        </div>
+        </br>
+        <div>
+            <label for="product-address">Адрес</label>
+            <input type="text" name="address" th:field="*{productDto.address}" id="product-address" maxlength="512" required>
+            <p style="color: red" th:if="${#fields.hasErrors('productDto.address')}" th:errors="*{productDto.address}">Ошибка заполнения адреса</p>
+        </div>
+        <div>
+            <input type="hidden" th:field="*{productDto.createTimestamp}" th:value="${productDto.getCreateTimestamp()}">
+            <input type="hidden" th:field="*{productDto.active}" th:value="${productDto.getActive()}">
+            <input type="hidden" th:field="*{productDto.imageId}" th:value="${productDto.getImageId()}">
+            <input type="hidden" th:field="*{productDto.imageUrl}" th:value="${productDto.getImageUrl()}">
+            <input type="hidden" th:field="*{productDto.sellerId}" th:value="${productDto.getSellerId()}">
+        </div>
+        </br>
+        <div>
+            <label for="product-description">Описание</label>
+            </br>
+            <textarea name="description" cols="50" rows="5" th:field="*{productDto.description}"
+                      id="product-description" required></textarea>
+            <p style="color: red" th:if="${#fields.hasErrors('productDto.description')}" th:errors="*{productDto.description}">Ошибка заполнения описания</p>
+        </div>
+        </br>
+        <div>
+            <input type="submit" value="Обновить объявление">
+        </div>
+        </br>
+    </form>
+    </br>
+</body>
+</html>
